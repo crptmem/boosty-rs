@@ -27,6 +27,7 @@ pub struct CurrencyPrices {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
+/// Paid post teaser
 pub struct Teaser {
     #[serde(rename = "type")]
     /// Type of teaser
