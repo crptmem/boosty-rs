@@ -77,9 +77,13 @@ async fn request(method: String) -> Result<Response> {
 /// * `blog_name` - Name of a blog to get posts
 ///
 /// # Examples
-/// ```ignore
-/// let posts = fetch_posts("boosty").await?;
-/// println!("{:?}", posts); 
+/// ```
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let posts = boosty_rs::request::fetch_posts("boosty".to_string()).await?;
+///     println!("{:?}", posts); 
+///     Ok(())
+/// }
 /// ```
 pub async fn fetch_posts(blog_name: String) -> Result<Vec<Post>> {
     let url = format!("blog/{}/post/", blog_name);
@@ -96,9 +100,13 @@ pub async fn fetch_posts(blog_name: String) -> Result<Vec<Post>> {
 /// * `post_id` - ID of a post in blog
 ///
 /// # Examples
-/// ```ignore
-/// let post = fetch_post("boosty", "c9fb8a19-c45e-4602-9942-087c3af28c1b").await?;
-/// println!("{:?}", post); 
+/// ```
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let post = boosty_rs::request::fetch_post("boosty".to_string(), "c9fb8a19-c45e-4602-9942-087c3af28c1b".to_string()).await?;
+///     println!("{:?}", post); 
+///     Ok(())
+/// }
 /// ```
 pub async fn fetch_post(blog_name: String, post_id: String) -> Result<Post> {
     let url = format!("blog/{}/post/{}", blog_name, post_id);
