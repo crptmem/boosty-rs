@@ -1,5 +1,7 @@
+/// API calls
 pub mod request;
 
+/// This crate provides asynchronous functions to access Boosty not documented, but accessible API
 #[cfg(test)]
 mod tests {
     use crate::request;
