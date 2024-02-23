@@ -1,6 +1,11 @@
 # boosty-rs
 A Rust library for Boosty closed API
 
+# Installation
+```sh
+$ cargo add boosty-rs
+```
+
 # Examples
 ### Fetch all posts from blog
 ```rust
