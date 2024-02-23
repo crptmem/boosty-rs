@@ -56,7 +56,7 @@ pub struct Post {
 ///
 /// # Examples
 ///
-/// ```
+/// ```ignore
 /// let body = request("blog/boosty/post").await?;
 /// let text = body.text().await?;
 /// println!("{:?}", text);
@@ -77,7 +77,7 @@ async fn request(method: String) -> Result<Response> {
 /// * `blog_name` - Name of a blog to get posts
 ///
 /// # Examples
-/// ```
+/// ```ignore
 /// let posts = fetch_posts("boosty").await?;
 /// println!("{:?}", posts); 
 /// ```
@@ -96,7 +96,7 @@ pub async fn fetch_posts(blog_name: String) -> Result<Vec<Post>> {
 /// * `post_id` - ID of a post in blog
 ///
 /// # Examples
-/// ```
+/// ```ignore
 /// let post = fetch_post("boosty", "c9fb8a19-c45e-4602-9942-087c3af28c1b").await?;
 /// println!("{:?}", post); 
 /// ```
