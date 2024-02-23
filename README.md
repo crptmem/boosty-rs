@@ -37,7 +37,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 ```rust
 use std::error::Error;
 use boosty_rs::request;
-use crate::auth::Auth;
+use boosty_rs::auth::Auth;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
