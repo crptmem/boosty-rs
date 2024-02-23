@@ -72,7 +72,6 @@ async fn request(method: String, auth: Option<Auth>) -> Result<Response> {
 pub async fn fetch_posts(blog_name: String, auth: Option<Auth>) -> Result<Vec<Post>> {
     let url = format!("blog/{}/post/", blog_name);
     let json: Value = request(url.clone(), auth).await?.json().await?;
-    println!("{:#?}", json.clone()["data"][3]);
     let posts: Vec<Post> = serde_json::from_value(json["data"].clone()).unwrap();
     Ok(posts)
 }
