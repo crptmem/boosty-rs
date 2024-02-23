@@ -2,6 +2,10 @@
 name = "boosty-rs"
 version = "0.1.0"
 edition = "2021"
+description = "A Rust library for Boosty closed API"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/crptmem/boosty-rs"
 
 [dependencies]
 error-chain = "0.12.4"
