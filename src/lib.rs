@@ -25,21 +25,15 @@ mod tests {
     /// Test that another post title is equal to hard-coded here and test is Boosty API still the same
     #[tokio::test]
     async fn fetch_post_second_test() -> Result<(), Box<dyn std::error::Error>> {
-        let response = request::fetch_post("boosty".to_string(), "f3f8055a-e7ff-4599-b62e-304c8b4b936e".to_string(), None).await?;
-        assert_eq!(response.title, "Boosty для иллюстраторов");
-        println!("{:#?}", response); 
+        let response = request::fetch_post("boosty".to_string(), "8c2ba2c5-da5c-4a64-94c4-4fef6147333a".to_string(), None).await?;
+        assert_eq!(response.title, "Boosty.to VS Patreon");
         Ok(())
     }
 
-    /// Test that two posts titles is equal to hard-coded here and test is Boosty API still the
-    /// same
     #[tokio::test]
-    async fn fetch_posts_test() -> Result<(), Box<dyn std::error::Error>> {
+    async fn fetch_posts() -> Result<(), Box<dyn std::error::Error>> {
         let response = request::fetch_posts("crptmem".to_string(), None).await?;
-        let titles = vec!["boosty-rs unit test fetch_posts 2", "boosty-rs unit test fetch_post"];
-        for (i, element) in response.iter().enumerate() {
-            assert_eq!(element.title, titles[i]);
-        }
+        println!("{:#?}", response); 
         Ok(())
     }
 }

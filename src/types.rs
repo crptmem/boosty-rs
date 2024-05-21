@@ -31,10 +31,21 @@ pub struct Teaser {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
+/// Uploaded to Boosty video URLs 
+pub struct PlayerUrls {
+    #[serde(rename = "type")]
+    /// Type of URL
+    pub content_type: String,
+    /// URL itself
+    pub url: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 /// Attached content to post
 pub struct Data {
     #[serde(rename = "type")]
-    /// Type of teaser
+    /// Type of content
     pub content_type: String,
     /// Width of content
     pub width: Option<isize>,
@@ -46,7 +57,9 @@ pub struct Data {
     pub url: Option<String>,
     /// Teaser ID
     pub id: Option<String>,
-    // Content itself (for example text)
+    /// Player URLs (for uploaded videos to Boosty)
+    pub player_urls: Option<Vec<PlayerUrls>>,
+    /// Content itself (for example text)
     pub content: Option<String>
 }
 

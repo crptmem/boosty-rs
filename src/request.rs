@@ -64,7 +64,7 @@ async fn request(method: String, auth: Option<Auth>) -> Result<Response> {
 /// ```
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let posts = boosty_rs::request::fetch_posts("boosty".to_string(), None).await?;
+///     let posts = boosty_rs::request::fetch_posts("crptmem".to_string(), None).await?;
 ///     println!("{:?}", posts); 
 ///     Ok(())
 /// }
