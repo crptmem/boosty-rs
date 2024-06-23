@@ -3,19 +3,11 @@ extern crate reqwest;
 use crate::types::Post;
 use reqwest::Response;
 use serde_json::Value;
-use error_chain::error_chain;
 
 use crate::auth::Auth;
 
 /// Boosty API URL
 pub const API_URL: &str = "https://api.boosty.to";
-
-error_chain! {
-    foreign_links {
-        Io(std::io::Error);
-        HttpRequest(reqwest::Error);
-    }
-}
 
 /// Sends a request to Boosty API, returns reqwest Response wrapped in Result
 ///
@@ -30,7 +22,7 @@ error_chain! {
 /// let text = body.text().await?;
 /// println!("{:?}", text);
 /// ```
-async fn request(method: String, auth: Option<Auth>) -> Result<Response> {
+async fn request(method: String, auth: Option<Auth>) -> Result<Response, reqwest::Error> {
     let url = format!("{}/v1/{}", API_URL, method);  // Will result in something like
                                                      // https://api.boosty.to/v1/blog/boosty/post/
                                                      // Trailing slash is required only for
@@ -69,11 +61,33 @@ async fn request(method: String, auth: Option<Auth>) -> Result<Response> {
 ///     Ok(())
 /// }
 /// ```
-pub async fn fetch_posts(blog_name: String, auth: Option<Auth>) -> Result<Vec<Post>> {
+pub async fn fetch_posts(blog_name: String, auth: Option<Auth>) -> Result<Vec<Post>, serde_json::Error> {
     let url = format!("blog/{}/post/", blog_name);
-    let json: Value = request(url.clone(), auth).await?.json().await?;
-    let posts: Vec<Post> = serde_json::from_value(json["data"].clone()).unwrap();
-    Ok(posts)
+    let json: Value = request(url.clone(), auth).await.unwrap().json().await.unwrap();
+    let posts: Result<Vec<Post>, serde_json::Error> = serde_json::from_value(json["data"].clone());
+    posts
+}
+
+/// Fetches all posts from blog but do not parse, returns a serde Value
+///
+/// # Arguments
+///
+/// * `blog_name` - Name of a blog to get posts
+/// * `auth` - Optional argument for authorization in API
+///
+/// # Examples
+/// ```
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let posts = boosty_rs::request::fetch_posts_raw("crptmem".to_string(), None).await?;
+///     println!("{:?}", posts); 
+///     Ok(())
+/// }
+/// ```
+pub async fn fetch_posts_raw(blog_name: String, auth: Option<Auth>) -> Result<Value, serde_json::Error> {
+    let url = format!("blog/{}/post/", blog_name);
+    let json: Value = request(url.clone(), auth).await.unwrap().json().await.unwrap();
+    Ok(json)
 }
 
 /// Fetch a certain post from blog, retuns Post wrapped in Result
@@ -92,8 +106,8 @@ pub async fn fetch_posts(blog_name: String, auth: Option<Auth>) -> Result<Vec<Po
 ///     Ok(())
 /// }
 /// ```
-pub async fn fetch_post(blog_name: String, post_id: String, auth: Option<Auth>) -> Result<Post> {
+pub async fn fetch_post(blog_name: String, post_id: String, auth: Option<Auth>) -> Result<Post, serde_json::Error> {
     let url = format!("blog/{}/post/{}", blog_name, post_id);
-    let post: Post = request(url, auth).await?.json().await?;
+    let post: Post = request(url, auth).await.unwrap().json().await.unwrap();
     Ok(post)
 }
