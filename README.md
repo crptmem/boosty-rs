@@ -1,6 +1,6 @@
 # boosty-rs
 A Rust library for Boosty closed API
-
+[![Rust](https://github.com/crptmem/boosty-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/crptmem/boosty-rs/actions/workflows/rust.yml)
 # Installation
 ```sh
 $ cargo add boosty-rs
