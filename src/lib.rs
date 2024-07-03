@@ -33,7 +33,7 @@ mod tests {
     /// Test all posts
     #[tokio::test]
     async fn fetch_posts() -> Result<(), Box<dyn std::error::Error>> {
-        let response = request::fetch_posts("crptmem".to_string(), None).await?;
+        let response = request::fetch_posts("crptmem".to_string(), 128, None).await?;
         println!("{:#?}", response); 
         Ok(())
     }

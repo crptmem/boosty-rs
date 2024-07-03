@@ -50,19 +50,20 @@ async fn request(method: String, auth: Option<Auth>) -> Result<Response, reqwest
 /// # Arguments
 ///
 /// * `blog_name` - Name of a blog to get posts
+/// * `limit` - Count of posts to return (Boosty default when no provided in request is 100)
 /// * `auth` - Optional argument for authorization in API
 ///
 /// # Examples
 /// ```
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let posts = boosty_rs::request::fetch_posts("crptmem".to_string(), None).await?;
+///     let posts = boosty_rs::request::fetch_posts("crptmem".to_string(), 300, None).await?;
 ///     println!("{:?}", posts); 
 ///     Ok(())
 /// }
 /// ```
-pub async fn fetch_posts(blog_name: String, auth: Option<Auth>) -> Result<Vec<Post>, serde_json::Error> {
-    let url = format!("blog/{}/post/", blog_name);
+pub async fn fetch_posts(blog_name: String, limit: i64, auth: Option<Auth>) -> Result<Vec<Post>, serde_json::Error> {
+    let url = format!("blog/{}/post/?limit={}", blog_name, limit);
     let json: Value = request(url.clone(), auth).await.unwrap().json().await.unwrap();
     let posts: Result<Vec<Post>, serde_json::Error> = serde_json::from_value(json["data"].clone());
     posts
@@ -73,19 +74,20 @@ pub async fn fetch_posts(blog_name: String, auth: Option<Auth>) -> Result<Vec<Po
 /// # Arguments
 ///
 /// * `blog_name` - Name of a blog to get posts
+/// * `limit` - Count of posts to return (Boosty default when no provided in request is 100)
 /// * `auth` - Optional argument for authorization in API
 ///
 /// # Examples
 /// ```
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let posts = boosty_rs::request::fetch_posts_raw("crptmem".to_string(), None).await?;
+///     let posts = boosty_rs::request::fetch_posts_raw("crptmem".to_string(), 300, None).await?;
 ///     println!("{:?}", posts); 
 ///     Ok(())
 /// }
 /// ```
-pub async fn fetch_posts_raw(blog_name: String, auth: Option<Auth>) -> Result<Value, serde_json::Error> {
-    let url = format!("blog/{}/post/", blog_name);
+pub async fn fetch_posts_raw(blog_name: String, limit: i64, auth: Option<Auth>) -> Result<Value, serde_json::Error> {
+    let url = format!("blog/{}/post/?limit={}", blog_name, limit);
     let json: Value = request(url.clone(), auth).await.unwrap().json().await.unwrap();
     Ok(json)
 }
