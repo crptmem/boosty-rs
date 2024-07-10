@@ -1,4 +1,5 @@
 # imgdl-rs
+FORMER `boosty-rs`
 A Rust library for downloading images from such services like Boosty and Gelbooru-powered sites
 [![Rust](https://github.com/crptmem/imgdl-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/crptmem/imgdl-rs/actions/workflows/rust.yml)
 # Installation
