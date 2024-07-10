@@ -1,12 +1,13 @@
-# boosty-rs
-A Rust library for Boosty closed API
-[![Rust](https://github.com/crptmem/boosty-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/crptmem/boosty-rs/actions/workflows/rust.yml)
+# imgdl-rs
+A Rust library for downloading images from such services like Boosty and Gelbooru-powered sites
+[![Rust](https://github.com/crptmem/imgdl-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/crptmem/imgdl-rs/actions/workflows/rust.yml)
 # Installation
 ```sh
-$ cargo add boosty-rs
+$ cargo add imgdl-rs
 ```
 
 # Examples
+## Boosty
 ### Fetch all posts from blog
 ```rust
 use std::error::Error;
