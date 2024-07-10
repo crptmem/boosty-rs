@@ -57,7 +57,7 @@ async fn request(method: String, auth: Option<Auth>) -> Result<Response, reqwest
 /// ```
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let posts = boosty_rs::boosty::request::fetch_posts("crptmem".to_string(), 300, None).await?;
+///     let posts = imgdl_rs::boosty::request::fetch_posts("crptmem".to_string(), 300, None).await?;
 ///     println!("{:?}", posts); 
 ///     Ok(())
 /// }
@@ -81,7 +81,7 @@ pub async fn fetch_posts(blog_name: String, limit: i64, auth: Option<Auth>) -> R
 /// ```
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let posts = boosty_rs::boosty::request::fetch_posts_raw("crptmem".to_string(), 300, None).await?;
+///     let posts = imgdl_rs::boosty::request::fetch_posts_raw("crptmem".to_string(), 300, None).await?;
 ///     println!("{:?}", posts); 
 ///     Ok(())
 /// }
@@ -103,7 +103,7 @@ pub async fn fetch_posts_raw(blog_name: String, limit: i64, auth: Option<Auth>) 
 /// ```
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let post = boosty_rs::boosty::request::fetch_post("boosty".to_string(), "c9fb8a19-c45e-4602-9942-087c3af28c1b".to_string(), None).await?;
+///     let post = imgdl_rs::boosty::request::fetch_post("boosty".to_string(), "c9fb8a19-c45e-4602-9942-087c3af28c1b".to_string(), None).await?;
 ///     println!("{:?}", post); 
 ///     Ok(())
 /// }

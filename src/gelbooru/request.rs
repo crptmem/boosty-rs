@@ -51,8 +51,8 @@ async fn request(root_url: String, proxy: Option<reqwest::Proxy>) -> Result<Resp
 /// ```
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let posts = boosty_rs::gelbooru::request::fetch_posts(
-///         String::from("https://safebooru.org/"), Some(String::from("omori")), Some(2), Some(reqwest::Proxy::all("socks5://127.0.0.1:8381")?)
+///     let posts = imgdl_rs::gelbooru::request::fetch_posts(
+///         String::from("https://safebooru.org/"), Some(String::from("omori")), Some(2), None
 ///     ).await?; // Fetch all posts with tag `omori` from page 2
 ///
 ///     println!("{:?}", posts); 
