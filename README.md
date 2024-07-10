@@ -12,7 +12,7 @@ $ cargo add imgdl-rs
 ### Fetch all posts from blog
 ```rust
 use std::error::Error;
-use boosty_rs::request;
+use boosty_rs::boosty::request;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 ### Fetch one post from blog
 ```rust
 use std::error::Error;
-use boosty_rs::request;
+use boosty_rs::boosty::request;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -38,8 +38,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 ### Fetch all posts from blog with authorization
 ```rust
 use std::error::Error;
-use boosty_rs::request;
-use boosty_rs::auth::Auth;
+use boosty_rs::boosty::request;
+use boosty_rs::boosty::auth::Auth;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
