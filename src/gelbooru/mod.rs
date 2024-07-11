@@ -1,5 +1,5 @@
-/// Gelbooru API requests module
+/// Safebooru API requests module
 pub mod request;
 
-/// Gelbooru API types module
+/// Safebooru API types module
 pub mod types;

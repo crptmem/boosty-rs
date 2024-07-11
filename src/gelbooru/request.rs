@@ -1,73 +1,104 @@
 extern crate reqwest;
 
 use reqwest::Response;
+use crate::gelbooru::types::Post;
 use serde_json::Value;
 
-use super::types;
+use super::types::APIMethods;
 
-/// Sends a request to Gelbooru API, returns reqwest Response wrapped in Result
-///
-/// # Arguments
-///
-/// * `root_url` - Root URL of Gelbooru-powered site
-/// * `proxy` - Optional proxy
-///
-/// # Examples
-///
-/// ```ignore
-/// let body = request("blog/boosty/post").await?;
-/// let text = body.text().await?;
-/// println!("{:?}", text);
-/// ```
-async fn request(root_url: String, proxy: Option<reqwest::Proxy>) -> Result<Response, reqwest::Error> {
-    let client = reqwest::Client::builder();
-    if let Some(proxy_unwrapped) = proxy {
-        client
-            .proxy(proxy_unwrapped)
-            .build()?
-            .get(root_url)
-            .header(reqwest::header::CONTENT_TYPE, "application/json")
-            .send()
-            .await
-    } else {
-        client
-            .build()?
-            .get(root_url)
-            .send()
-            .await
-    }
+/// Gelbooru API URL
+pub const API_URL: &str = "https://gelbooru.com";
+
+/// Gelbooru API client struct
+pub struct Client {
+    /// Optional proxy field, for use if access to Gelbooru is restricted in user country
+    proxy: Option<reqwest::Proxy>
 }
 
-/// Fetches all posts from page, retuns a vector of Post wrapped in Result
-///
-/// # Arguments
-///
-/// * `url` - Root site url w/ trailing slash (like https://safebooru.org)
-/// * `tag` - Optional argument to get only posts from specified tags
-/// * `pid` - Optional argument to get posts from specified page
-/// * `proxy` - Optional proxy
-///
-/// # Examples
-/// ```
-/// #[tokio::main]
-/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let posts = imgdl_rs::gelbooru::request::fetch_posts(
-///         String::from("https://safebooru.org/"), Some(String::from("omori")), Some(2), None
-///     ).await?; // Fetch all posts with tag `omori` from page 2
-///
-///     println!("{:?}", posts); 
-///     Ok(())
-/// }
-/// ```
-pub async fn fetch_posts(url: String, tags: Option<String>, pid: Option<i64>, proxy: Option<reqwest::Proxy>) -> Result<Vec<types::Post>, serde_json::Error> {
-    let mut result_url: String = format!("{url}/{}&tags=", super::types::APIMethods::PostsList.as_str());
-    if let Some(tags_unwrapped) = tags {
-        result_url.push_str(&tags_unwrapped);
+impl Client {
+    /// Creates a new instance of `Client`
+    /// 
+    /// # Arguments
+    /// 
+    /// * `proxy` - Optional argument for proxy, any protocol is supported, String, a URL like
+    ///     `socks5://127.0.0.1:8381`.
+    ///
+    pub fn new(proxy: Option<&str>) -> Self {
+        if let Some(proxy) = proxy {
+            Client {
+                proxy: Some(reqwest::Proxy::all(proxy).unwrap())
+            }
+        } else {
+            Client {
+                proxy: None
+            }
+        }
     }
-    if let Some(pid_unwrapped) = pid {
-        result_url.push_str(format!("&pid={}", pid_unwrapped).as_str());
+
+    /// Sends a request to Gelbooru API, returns reqwest Response wrapped in Result
+    ///
+    /// # Arguments
+    ///
+    /// * `url` - Request URL
+    /// * `proxy` - Optional proxy
+    ///
+    /// # Examples
+    ///
+    /// ```ignore
+    /// let body = request(format!("{}/{}", API_URL, APIMethods::PostsList.as_str())).await?;
+    /// let text = body.text().await?;
+    /// println!("{:?}", text);
+    /// ```
+    async fn request(&self, url: String) -> Result<Response, reqwest::Error> {
+        let client = reqwest::Client::builder();
+        if let Some(proxy) = &self.proxy {
+            client
+                .proxy(proxy.clone())
+                .build()?
+                .get(url)
+                .header(reqwest::header::CONTENT_TYPE, "application/json")
+                .send()
+                .await
+        } else {
+            client
+                .build()?
+                .get(url)
+                .send()
+                .await
+        }
     }
-    let json: Value = request(result_url, proxy).await.unwrap().json().await.unwrap();
-    let posts: Result<Vec<types::Post>, serde_json::Error> = serde_json::from_value(json);
-    posts
+
+    /// Fetches all posts from page, retuns a vector of Post wrapped in Result
+    ///
+    /// # Arguments
+    ///
+    /// * `tags` - Argument to get only posts from specified tags
+    /// * `page` - Argument to get posts from specified page
+    ///
+    /// # Examples
+    /// ```
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ///     let client = imgdl_rs::gelbooru::request::Client::new(None);
+    ///     let posts = client.fetch_posts(
+    ///         "rating:general", 3
+    ///     ).await?; // Fetch all posts with tag `omori` from page 2
+    ///
+    ///     println!("{:?}", posts); 
+    ///     Ok(())
+    /// }
+    /// ```
+    pub async fn fetch_posts(&self, tags: &str, page: i64) 
+        -> Result<Vec<Post>, serde_json::Error> {
+        let json: Value = Self::request(
+            self,
+            format!(
+                "{}/{}&tags={tags}&pid={page}",
+                API_URL,
+                APIMethods::PostsList.as_str()
+                )
+            ).await.unwrap().json().await.unwrap();
+        let posts: Result<Vec<Post>, serde_json::Error> = serde_json::from_value(json["post"].clone());
+        posts
+    }
 }
