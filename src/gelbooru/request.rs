@@ -10,6 +10,7 @@ use super::types::{APIMethods, Attributes};
 pub const API_URL: &str = "https://gelbooru.com";
 
 /// Gelbooru API client struct
+#[derive(Clone, Debug)]
 pub struct Client {
     /// Optional proxy field, for use if access to Gelbooru is restricted in user country
     proxy: Option<reqwest::Proxy>
