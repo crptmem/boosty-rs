@@ -4,7 +4,7 @@ use reqwest::Response;
 use crate::gelbooru::types::Post;
 use serde_json::Value;
 
-use super::types::APIMethods;
+use super::types::{APIMethods, Attributes};
 
 /// Gelbooru API URL
 pub const API_URL: &str = "https://gelbooru.com";
@@ -82,7 +82,7 @@ impl Client {
     ///     let client = imgdl_rs::gelbooru::request::Client::new(None);
     ///     let posts = client.fetch_posts(
     ///         "rating:general", 3
-    ///     ).await?; // Fetch all posts with tag `omori` from page 2
+    ///     ).await?; // Fetch all posts with tag `rating:general` from page 2
     ///
     ///     println!("{:?}", posts); 
     ///     Ok(())
@@ -99,6 +99,40 @@ impl Client {
                 )
             ).await.unwrap().json().await.unwrap();
         let posts: Result<Vec<Post>, serde_json::Error> = serde_json::from_value(json["post"].clone());
+        posts
+    }
+
+    /// Fetches attributes of page, retuns an Attributes struct wrapped in Result
+    ///
+    /// # Arguments
+    ///
+    /// * `tags` - Argument to get only posts from specified tags
+    /// * `page` - Argument to get attributes for specified page 
+    ///
+    /// # Examples
+    /// ```
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ///     let client = imgdl_rs::gelbooru::request::Client::new(None);
+    ///     let posts = client.fetch_attributes(
+    ///         "rating:general", 1
+    ///     ).await?; // Fetch attributes for tag `rating:general`
+    ///
+    ///     println!("{:?}", posts); 
+    ///     Ok(())
+    /// }
+    /// ```
+    pub async fn fetch_attributes(&self, tags: &str, page: i64) 
+        -> Result<Attributes, serde_json::Error> {
+        let json: Value = Self::request(
+            self,
+            format!(
+                "{}/{}&tags={tags}&pid={page}",
+                API_URL,
+                APIMethods::PostsList.as_str()
+                )
+            ).await.unwrap().json().await.unwrap();
+        let posts: Result<Attributes, serde_json::Error> = serde_json::from_value(json["@attributes"].clone());
         posts
     }
 }

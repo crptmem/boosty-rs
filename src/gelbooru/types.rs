@@ -68,6 +68,17 @@ pub struct Post {
     pub has_children: String
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+/// Page attributes
+pub struct Attributes {
+    /// Posts limit for response
+    pub limit: i64,
+    /// Post offset (page 1 is offset 100)
+    pub offset: i64,
+    /// Total post count
+    pub count: i64
+}
+
 pub enum APIMethods {
     PostsList
 }
